@@ -1,5 +1,6 @@
 import subprocess
 import os
+from pathlib import Path
 resize_settings = """
 {
 "enabled": true,
@@ -45,7 +46,9 @@ export_settings = """
 export_mode = "--webp"
 input_path = "./input"
 output_path = "./output"
-
+def setup():
+    Path(input_path).mkdir(exist_ok=True)
+    Path(output_path).mkdir(exist_ok=True)
 
 def run():
     for file in os.listdir(input_path):
@@ -53,9 +56,11 @@ def run():
         print(f"Exporting [{path}]")
         export_asset(path)
 
-        
+
 def export_asset(path):
     cmd = f"squoosh-cli --resize '{resize_settings}' {export_mode} '{export_settings}' -d {output_path} {input_path}"
     print(cmd)
     subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE)
+    
+setup()
 run()
