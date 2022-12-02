@@ -54,18 +54,24 @@ def run():
     for file in os.listdir(input_path):
         path = input_path + "/" + file
         try: 
-            if file == ".ds_store":
+            if file == ".DS_Store":
+                print(f"Skipping [{path}]")
                 continue
             print(f"Exporting [{path}]")
-            export_asset(path)
-        except:
-            print("Error exporting {path} --- Skipped")
+            export_asset(input_path,file)
+        except (RuntimeError, TypeError, NameError) as e:
+            print(f"Error exporting {path}: {e} --- Skipped")
             continue
 
 
-def export_asset(path):
-    cmd = f"squoosh-cli --resize '{resize_settings}' {export_mode} '{export_settings}' -d {output_path} {path}"
+def export_asset(path, file):
+    cmd = f"squoosh-cli --resize '{resize_settings}' {export_mode} '{export_settings}' -d {output_path} {path}/{file}"
     subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    output_file = os.path.splitext(file)[0] + "." + export_mode.removeprefix("--")
+    size_before = os.path.getsize(Path(path, file))
+    size_after = os.path.getsize(Path(output_path, output_file))
+    delta = size_before - size_after
+    print(f"Removed {'{:,}'.format(delta)} bytes ({'{:.1%}'.format( delta / size_before)} %)\n")
     
 setup()
 run()
