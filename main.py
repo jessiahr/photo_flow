@@ -53,14 +53,20 @@ def setup():
 def run():
     for file in os.listdir(input_path):
         path = input_path + "/" + file
-        print(f"Exporting [{path}]")
-        export_asset(path)
+        try: 
+            if file == ".ds_store":
+                continue
+            print(f"Exporting [{path}]")
+            export_asset(path)
+        except:
+            print("Error exporting {path} --- Skipped")
+            continue
 
 
 def export_asset(path):
-    cmd = f"squoosh-cli --resize '{resize_settings}' {export_mode} '{export_settings}' -d {output_path} {input_path}"
+    cmd = f"squoosh-cli --resize '{resize_settings}' {export_mode} '{export_settings}' -d {output_path} {path}"
     print(cmd)
-    subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE)
+    subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
 setup()
 run()
