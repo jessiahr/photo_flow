@@ -65,7 +65,6 @@ def run():
 
 def export_asset(path):
     cmd = f"squoosh-cli --resize '{resize_settings}' {export_mode} '{export_settings}' -d {output_path} {path}"
-    print(cmd)
     subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
 setup()
