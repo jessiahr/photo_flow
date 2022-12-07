@@ -5,7 +5,7 @@ resize_settings = """
 {
 "enabled": true,
 "width": 1920,
-"height": 1281,
+"height": 1280,
 "method": "lanczos3",
 "fitMethod": "stretch",
 "premultiply": true,
@@ -44,7 +44,7 @@ export_settings = """
 }
 """.replace("\n", "")
 export_mode = "--webp"
-input_path = "./input"
+input_path = "./input_landscape"
 output_path = "./output"
 def setup():
     Path(input_path).mkdir(exist_ok=True)
